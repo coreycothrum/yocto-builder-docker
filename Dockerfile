@@ -14,6 +14,13 @@ RUN apt-get    update      && \
 RUN pip3 install kas --upgrade
 
 ################################################################################
+RUN git clone https://github.com/melloyawn/melloVIM.git /tmp/.vim_tmp            && \
+                                                        /tmp/.vim_tmp/install.sh && \
+                                                 rm -fr /tmp/.vim_tmp
+
+RUN git clone https://github.com/kergoth/vim-bitbake.git /etc/vim/pack/lang/start/bitbake
+
+################################################################################
 # user setup ###################################################################
 ################################################################################
 ENV USERNAME user
