@@ -1,24 +1,29 @@
-## Overview 
+## Overview
 Yocto build environment
 
+### Setup
+It is expected that ``YOCTO_WORKDIR`` be set to your YOCTO src/working directory.
+This directoy will be volume mounted to the docker container, and act as a 'share' between the two.
+
+This should probably be a separate, large, storage device.
+
+I recommend setting this permanently via ``~/.bashrc``:
+
+    export YOCTO_WORKDIR="/your/yocto/working/dir"
+
 ### Build
-It is expected that the working/src directory be volume mounted to build-time variable ``work_dir``. This is the target location *inside the container*.
-
-The environment variable ``YOCTO_WORKDIR`` is also set to this directory. The default value is ``/yocto_workspace``.
-
-    export YOCTO_WORKDIR="/yocto_workspace"
-
-    sudo docker build --build-arg "host_uid=$(id -u)"       \
-                      --build-arg "host_gid=$(id -g)"       \
-                      --build-arg "work_dir=$YOCTO_WORKDIR" \
-                      -f Dockerfile                         \
+    sudo docker build --build-arg "host_uid=$(id -u)" \
+                      --build-arg "host_gid=$(id -g)" \
+                      -f Dockerfile                   \
                       -t yocto-builder .
 
 ### Run
-    export YOCTO_WORKDIR="/yocto_workspace"
+    export YOCTO_WORKDIR="/your/yocto/working/dir"
 
     sudo docker run   --rm -it                                 \
                       --privileged                             \
                       --volume /dev:/dev                       \
-                      --volume /local/workdir:"$YOCTO_WORKDIR" \
+                      --volume /run:/run                       \
+                      --volume $YOCTO_WORKDIR:"$YOCTO_WORKDIR" \
+                      --env     YOCTO_WORKDIR="$YOCTO_WORKDIR" \
                       yocto-builder
