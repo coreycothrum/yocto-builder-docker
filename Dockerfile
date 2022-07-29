@@ -1,24 +1,16 @@
-FROM kasproject/kas
+FROM ghcr.io/siemens/kas/kas:3.0.2
 
 ################################################################################
 # OS setup #####################################################################
 ################################################################################
 RUN apt-get    update      && \
-    apt-get -y upgrade     && \
     apt-get -y install        \
-      bash                    \
-      qemu-system             \
-      sudo                 && \
+               bash           \
+               qemu-system    \
+               sudo        && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN pip3 install kas --upgrade
-
-################################################################################
-RUN git clone https://github.com/melloyawn/melloVIM.git /tmp/.vim_tmp            && \
-                                                        /tmp/.vim_tmp/install.sh && \
-                                                 rm -fr /tmp/.vim_tmp
-
-RUN git clone https://github.com/kergoth/vim-bitbake.git /etc/vim/pack/lang/start/bitbake
 
 ################################################################################
 # user setup ###################################################################
